@@ -1,0 +1,33 @@
+name: Create Release Tag
+on:
+  push:
+    branches:
+      - 'release'
+
+jobs:
+  release-tag:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
+
+      - name: Get npm version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.1.0
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.PAT }}
+          custom_tag: ${{ steps.package-version.outputs.current-version }}
+
+      - name: Merge release to master
+        uses: devmasx/merge-branch@v1.4.0
+        with:
+          label_name: 'merge release back to master'
+          type: now
+          target_branch: master
+          github_token: ${{ secrets.PAT }}
