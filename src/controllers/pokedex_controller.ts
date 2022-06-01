@@ -27,6 +27,10 @@ export class PokedexController extends BaseController {
         return await this.pokedexService.updatePokedex(pokedexId, pokedexData);
     }
 
+    public async deletePokedex(data: RequestData): Promise<any> {
+        return await this.pokedexService.deletePokedex(data.params.id);
+    }
+
     public setRoutes(): void {
         this.addRoute('get', '/', this.getAllPokedex.bind(this));
         this.addRoute('get', '/:id', this.getPokedexById.bind(this));
@@ -36,6 +40,7 @@ export class PokedexController extends BaseController {
         this.addRoute('put', '/:id', this.updatePokedex.bind(this), {
             validate: SCHEME.UPDATE_POKEDEX
         });
+        this.addRoute('delete', '/:id', this.deletePokedex.bind(this));
     }
 }
 
