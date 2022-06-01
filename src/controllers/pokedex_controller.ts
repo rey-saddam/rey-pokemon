@@ -16,9 +16,16 @@ export class PokedexController extends BaseController {
         return await this.pokedexService.getPokedexById(data.params.id);
     }
 
+    public async createPokedex(data: RequestData): Promise<any> {
+        return await this.pokedexService.createPokedex(data.body);
+    }
+
     public setRoutes(): void {
         this.addRoute('get', '/', this.getAllPokedex.bind(this));
         this.addRoute('get', '/:id', this.getPokedexById.bind(this));
+        this.addRoute('post', '/', this.createPokedex.bind(this), {
+            validate: SCHEME.CREATE_POKEDEX
+        });
     }
 }
 
