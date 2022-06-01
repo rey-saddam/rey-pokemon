@@ -12,7 +12,15 @@ export class PokedexServiceImpl extends Service implements PokedexService {
         return this.PokedexRepository.findAll({}, {});
     }
 
-    public async getPokedexById(id: string): Promise<PokedexProperties> {}
+    public async getPokedexById(id: string): Promise<PokedexProperties> {
+        const pokedex = await this.PokedexRepository.findOne({ id });
+
+        if (!pokedex) {
+            throw new Error('Pokedex not found');
+        }
+
+        return pokedex;
+    }
 
     public async createPokedex(
         payload: PokedexProperties
