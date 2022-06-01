@@ -24,7 +24,9 @@ export class PokedexServiceImpl extends Service implements PokedexService {
 
     public async createPokedex(
         payload: PokedexProperties
-    ): Promise<PokedexProperties> {}
+    ): Promise<PokedexProperties> {
+        return this.PokedexRepository.create(payload);
+    }
 
     public async updatePokedex(
         id: string,
