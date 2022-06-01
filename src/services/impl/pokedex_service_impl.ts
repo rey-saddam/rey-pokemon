@@ -52,8 +52,6 @@ export class PokedexServiceImpl extends Service implements PokedexService {
 
         await this.PokedexRepository.delete({ id });
     }
-
-    public setRoutes(): void {}
 }
 
 export default PokedexServiceImpl;
