@@ -1,4 +1,7 @@
 import { App as BaseApp, SQLContext, RedisContext } from 'rey-common';
+import PokedexRepositoryImpl from './repositories/impl/pokedex_repository_impl';
+import PokedexServiceImpl from './services/impl/pokedex_service_impl';
+import PokedexController from './controllers/pokedex_controller';
 
 class App extends BaseApp {
     public async initProviders(): Promise<void> {
@@ -11,7 +14,12 @@ class App extends BaseApp {
         });
     }
 
-    public async initControllers(): Promise<void> {}
+    public async initControllers(): Promise<void> {
+        const pokedexRepo = new PokedexRepositoryImpl();
+        const pokedexService = new PokedexServiceImpl(pokedexRepo);
+
+        this.addController(new PokedexController(pokedexService));
+    }
 }
 
 export default App;
