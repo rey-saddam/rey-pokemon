@@ -8,7 +8,9 @@ export class PokedexServiceImpl extends Service implements PokedexService {
         super();
     }
 
-    public async getAllPokedex(): Promise<PokedexProperties[]> {}
+    public async getAllPokedex(): Promise<PokedexProperties[]> {
+        return this.PokedexRepository.findAll({}, {});
+    }
 
     public async getPokedexById(id: string): Promise<PokedexProperties> {}
 
