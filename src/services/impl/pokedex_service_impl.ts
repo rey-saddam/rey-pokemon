@@ -31,7 +31,17 @@ export class PokedexServiceImpl extends Service implements PokedexService {
     public async updatePokedex(
         id: string,
         payload: PokedexProperties
-    ): Promise<PokedexProperties> {}
+    ): Promise<PokedexProperties> {
+        const pokedex = await this.PokedexRepository.findOne({ id });
+
+        if (!pokedex) {
+            throw new Error('Pokedex not found');
+        }
+
+        await this.PokedexRepository.update({ id }, payload);
+
+        return pokedex;
+    }
 
     public async deletePokedex(id: string): Promise<void> {}
 
