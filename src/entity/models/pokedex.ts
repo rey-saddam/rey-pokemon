@@ -9,7 +9,7 @@ export interface PokedexProperties extends BaseProps {
     height: number;
     weight: number;
     abilities: string[];
-    weeaknesses: string[];
+    weaknesses: string[];
     hp: number;
     attack: number;
     defense: number;
