@@ -8,7 +8,13 @@ export class PokedexController extends BaseController {
         super({ path: API_ROUTE.POKEDEX });
     }
 
-    public setRoutes(): void {}
+    public async getAllPokedex(): Promise<any> {
+        return await this.pokedexService.getAllPokedex();
+    }
+
+    public setRoutes(): void {
+        this.addRoute('get', '/', this.getAllPokedex.bind(this));
+    }
 }
 
 export default PokedexController;
