@@ -96,3 +96,28 @@ test.serial('Create pokedex - success', async (t: any): Promise<void> => {
             t.fail(err.message);
         });
 });
+
+test.serial('Update pokedex - success', async (t: any): Promise<void> => {
+    const expectedResult = POKEDEX;
+
+    const mockPokedex = t.context.sandbox
+        .mock(PokedexRepositoryImpl.prototype)
+        .expects('update')
+        .resolves(expectedResult);
+
+    const mockPokedexById = t.context.sandbox
+        .mock(PokedexRepositoryImpl.prototype)
+        .expects('findOne')
+        .resolves(expectedResult);
+
+    await pokedexService
+        .updatePokedex(POKEDEX.id, { ...POKEDEX, name: 'new name' })
+        .then((actualResult: PokedexProperties): void => {
+            t.true(mockPokedex.called);
+            t.true(mockPokedexById.called);
+            t.deepEqual(actualResult, expectedResult);
+        })
+        .catch((err: any): void => {
+            t.fail(err.message);
+        });
+});
