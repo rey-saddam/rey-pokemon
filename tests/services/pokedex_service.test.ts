@@ -38,3 +38,22 @@ test.serial('Get all pokedex - success', async (t: any): Promise<void> => {
             t.fail(err.message);
         });
 });
+
+test.serial('Get pokedex by id - success', async (t: any): Promise<void> => {
+    const expectedResult = POKEDEX;
+
+    const mockPokedex = t.context.sandbox
+        .mock(PokedexRepositoryImpl.prototype)
+        .expects('findOne')
+        .resolves(expectedResult);
+
+    await pokedexService
+        .getPokedexById(POKEDEX.id)
+        .then((actualResult: PokedexProperties): void => {
+            t.true(mockPokedex.called);
+            t.deepEqual(actualResult, expectedResult);
+        })
+        .catch((err: any): void => {
+            t.fail(err.message);
+        });
+});
