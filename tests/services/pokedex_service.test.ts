@@ -121,3 +121,32 @@ test.serial('Update pokedex - success', async (t: any): Promise<void> => {
             t.fail(err.message);
         });
 });
+
+test.serial('Update pokedex - not found', async (t: any): Promise<void> => {
+    const expectedResult = null;
+
+    const mockPokedex = t.context.sandbox
+        .mock(PokedexRepositoryImpl.prototype)
+        .expects('update')
+        .resolves(expectedResult);
+
+    const mockPokedexById = t.context.sandbox
+        .mock(PokedexRepositoryImpl.prototype)
+        .expects('findOne')
+        .resolves(expectedResult);
+
+    await pokedexService
+        .updatePokedex('not-found', {
+            ...POKEDEX,
+            name: 'new name'
+        })
+        .then((): void => {
+            t.fail();
+        })
+        .catch((err: any): void => {
+            t.true(mockPokedex.notCalled);
+            t.true(mockPokedexById.called);
+            t.true(err instanceof NotFoundError);
+            t.is(err.message, 'Pokedex not found');
+        });
+});
