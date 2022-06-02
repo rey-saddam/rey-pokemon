@@ -175,3 +175,29 @@ test.serial('Delete pokedex - success', async (t: any): Promise<void> => {
             t.fail(err.message);
         });
 });
+
+test.serial('Delete pokedex - not found', async (t: any): Promise<void> => {
+    const expectedResult = null;
+
+    const mockPokedex = t.context.sandbox
+        .mock(PokedexRepositoryImpl.prototype)
+        .expects('delete')
+        .resolves();
+
+    const mockPokedexById = t.context.sandbox
+        .mock(PokedexRepositoryImpl.prototype)
+        .expects('findOne')
+        .resolves(expectedResult);
+
+    await pokedexService
+        .deletePokedex('not-found')
+        .then((): void => {
+            t.fail();
+        })
+        .catch((err: any): void => {
+            t.true(mockPokedex.notCalled);
+            t.true(mockPokedexById.called);
+            t.true(err instanceof NotFoundError);
+            t.is(err.message, 'Pokedex not found');
+        });
+});
