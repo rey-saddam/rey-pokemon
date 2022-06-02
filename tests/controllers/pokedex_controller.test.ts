@@ -26,3 +26,19 @@ test.afterEach.always(
         t.context.server.close();
     }
 );
+
+test.serial('Get all pokedex - success', async (t: any) => {
+    const expectedResult = [POKEDEX];
+
+    const mockPokedex = t.context.sandbox
+        .mock(PokedexServiceImpl.prototype)
+        .expects('getAllPokedex')
+        .resolves(expectedResult);
+
+    const url = `${t.context.prefixUrl}/v1/pokedex`;
+    const res = await axios.get(url);
+
+    t.true(mockPokedex.called);
+    t.deepEqual(res.data, expectedResult);
+    t.is(res.data.length, 1);
+});
