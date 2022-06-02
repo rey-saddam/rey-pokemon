@@ -57,3 +57,23 @@ test.serial('Get pokedex by id - success', async (t: any): Promise<void> => {
             t.fail(err.message);
         });
 });
+
+test.serial('Get pokedex by id - not found', async (t: any): Promise<void> => {
+    const expectedResult = null;
+
+    const mockPokedex = t.context.sandbox
+        .mock(PokedexRepositoryImpl.prototype)
+        .expects('findOne')
+        .resolves(expectedResult);
+
+    await pokedexService
+        .getPokedexById('not-found')
+        .then((): void => {
+            t.fail();
+        })
+        .catch((err: any): void => {
+            t.true(mockPokedex.called);
+            t.true(err instanceof NotFoundError);
+            t.is(err.message, 'Pokedex not found');
+        });
+});
