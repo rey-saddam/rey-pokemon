@@ -42,3 +42,18 @@ test.serial('Get all pokedex - success', async (t: any) => {
     t.deepEqual(res.data, expectedResult);
     t.is(res.data.length, 1);
 });
+
+test.serial('Get pokedex by id - success', async (t: any) => {
+    const expectedResult = POKEDEX;
+
+    const mockPokedex = t.context.sandbox
+        .mock(PokedexServiceImpl.prototype)
+        .expects('getPokedexById')
+        .resolves(expectedResult);
+
+    const url = `${t.context.prefixUrl}/v1/pokedex/1`;
+    const res = await axios.get(url);
+
+    t.true(mockPokedex.called);
+    t.deepEqual(res.data, expectedResult);
+});
