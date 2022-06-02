@@ -1,4 +1,5 @@
 import { Service } from 'rey-common';
+import { NotFoundError } from 'rey-common/modules/utils/http_error';
 import { PokedexProperties } from '../../entity/models/pokedex';
 import PokedexRepository from '../../repositories/pokedex_repository';
 import PokedexService from '../pokedex_service';
@@ -16,7 +17,7 @@ export class PokedexServiceImpl extends Service implements PokedexService {
         const pokedex = await this.PokedexRepository.findOne({ id });
 
         if (!pokedex) {
-            throw new Error('Pokedex not found');
+            throw new NotFoundError('Pokedex not found', 'POKEDEX_NOT_FOUND');
         }
 
         return pokedex;
@@ -35,7 +36,7 @@ export class PokedexServiceImpl extends Service implements PokedexService {
         const pokedex = await this.PokedexRepository.findOne({ id });
 
         if (!pokedex) {
-            throw new Error('Pokedex not found');
+            throw new NotFoundError('Pokedex not found', 'POKEDEX_NOT_FOUND');
         }
 
         await this.PokedexRepository.update({ id }, payload);
@@ -43,14 +44,16 @@ export class PokedexServiceImpl extends Service implements PokedexService {
         return pokedex;
     }
 
-    public async deletePokedex(id: string): Promise<void> {
+    public async deletePokedex(id: string): Promise<any> {
         const pokedex = await this.PokedexRepository.findOne({ id });
 
         if (!pokedex) {
-            throw new Error('Pokedex not found');
+            throw new NotFoundError('Pokedex not found', 'POKEDEX_NOT_FOUND');
         }
 
         await this.PokedexRepository.delete({ id });
+
+        return { id };
     }
 }
 
