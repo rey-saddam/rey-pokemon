@@ -87,3 +87,18 @@ test.serial('Create pokedex - success', async (t: any) => {
     t.true(mockPokedex.called);
     t.deepEqual(res.data, expectedResult);
 });
+
+test.serial('Update pokedex - success', async (t: any) => {
+    const expectedResult = POKEDEX;
+
+    const mockPokedex = t.context.sandbox
+        .mock(PokedexServiceImpl.prototype)
+        .expects('updatePokedex')
+        .resolves(expectedResult);
+
+    const url = `${t.context.prefixUrl}/v1/pokedex/1`;
+    const res = await axios.put(url, POKEDEX);
+
+    t.true(mockPokedex.called);
+    t.deepEqual(res.data, expectedResult);
+});
